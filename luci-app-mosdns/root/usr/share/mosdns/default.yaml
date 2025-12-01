@@ -80,6 +80,12 @@ plugins:
       files:
         - "/etc/mosdns/rule/local-ptr.txt"
 
+  - tag: client_ip_cn
+    type: ip_set
+    args:
+      files:
+        - "/etc/mosdns/rule/client-ip-cn.txt"
+
   - tag: cloudflare_cidr
     type: ip_set
     args:
@@ -143,6 +149,13 @@ plugins:
       - matches: has_resp
         exec: accept
 
+  - tag: query_is_cloudflare_ip
+    type: sequence
+    args:
+      - exec: $forward_local
+      - matches: "resp_ip $cloudflare_cidr"
+        exec: black_hole CLOUDFLARE_IP
+
   - tag: query_is_non_local_ip
     type: sequence
     args:
@@ -177,6 +190,12 @@ plugins:
     type: sequence
     args:
       - matches: qname $ddnslist
+        exec: $forward_local
+
+  - tag: query_is_client_ip_cn
+    type: sequence
+    args:
+      - matches: client_ip $client_ip_cn
         exec: $forward_local
 
   - tag: query_is_local_domain
@@ -222,6 +241,8 @@ plugins:
     args:
       - exec: $hosts
       - exec: jump has_resp_sequence
+      - exec: $query_is_client_ip_cn
+      - exec: jump has_resp_sequence
       - matches:
         - "!qname $ddnslist"
         - "!qname $blocklist"
@@ -234,15 +255,17 @@ plugins:
       - exec: jump has_resp_sequence
       - exec: $query_is_ddns_domain
       - exec: jump has_resp_sequence
-      - exec: $query_is_whitelist_domain
+      - exec: $query_is_greylist_domain
       - exec: jump has_resp_sequence
       - exec: $query_is_reject_domain
       - exec: jump has_resp_sequence
-      - exec: $query_is_greylist_domain
+      - exec: $query_is_whitelist_domain
       - exec: jump has_resp_sequence
       - exec: $query_is_local_domain
       - exec: jump has_resp_sequence
       - exec: $query_is_no_local_domain
+      - exec: jump has_resp_sequence
+      - exec: $query_is_cloudflare_ip
       - exec: jump has_resp_sequence
       - exec: $fallback
 

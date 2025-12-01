@@ -379,6 +379,12 @@ msgstr "PTR 黑名单"
 msgid "These domains are blocked from PTR requests"
 msgstr "加入的域名将阻止 PTR 请求（每个域名一行，支持域名匹配规则）"
 
+msgid "Client IP CN Direct"
+msgstr "客户端IP国内直连"
+
+msgid "These client IP addresses/CIDR will use local DNS for direct connection"
+msgstr "加入的客户端IP地址/CIDR将使用国内DNS服务器进行连接（每行一个IP或CIDR网段）"
+
 msgid "GeoData Export"
 msgstr "GeoData 导出"
 
