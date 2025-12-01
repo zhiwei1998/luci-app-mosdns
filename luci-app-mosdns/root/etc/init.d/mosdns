@@ -105,6 +105,16 @@ generate_config() {
 	json_close_array
 	json_close_object
 	json_close_object
+	# plugin: client_ip_cn
+	json_add_object
+	json_add_string "tag" "client_ip_cn"
+	json_add_string "type" "ip_set"
+	json_add_object "args"
+	json_add_array "files"
+	json_add_string "" "/var/mosdns/client-ip-cn.txt"
+	json_close_array
+	json_close_object
+	json_close_object
 	# plugin: geosite_apple
 	json_add_object
 	json_add_string "tag" "geosite_apple"
@@ -489,6 +499,17 @@ generate_config() {
 	json_close_object
 	json_close_array
 	json_close_object
+	# plugin: query_is_client_ip_cn
+	json_add_object
+	json_add_string "tag" "query_is_client_ip_cn"
+	json_add_string "type" "sequence"
+	json_add_array "args"
+	json_add_object
+	json_add_string "matches" "client_ip \$client_ip_cn"
+	json_add_string "exec" "\$forward_local"
+	json_close_object
+	json_close_array
+	json_close_object
 	# plugin: query_is_local_domain
 	json_add_object
 	json_add_string "tag" "query_is_local_domain"
@@ -594,6 +615,12 @@ generate_config() {
 	}
 	json_add_object
 	json_add_string "exec" "\$redirect"
+	json_close_object
+	json_add_object
+	json_add_string "exec" "jump has_resp_sequence"
+	json_close_object
+	json_add_object
+	json_add_string "exec" "\$query_is_client_ip_cn"
 	json_close_object
 	json_add_object
 	json_add_string "exec" "jump has_resp_sequence"

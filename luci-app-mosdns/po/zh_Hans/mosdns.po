@@ -464,5 +464,11 @@ msgstr "自定义 Netflix、Disney+、Hulu 以及 “流媒体” 规则列表�
 msgid "Streaming Media"
 msgstr "流媒体"
 
-msgid "When enabling 'Custom Stream Media DNS', added domains will always use the 'Streaming Media DNS server' for resolution (one domain per line, supports domain matching rules)."
+msgid "When enabling \'Custom Stream Media DNS\', added domains will always use the \'Streaming Media DNS server\' for resolution (one domain per line, supports domain matching rules)."
 msgstr "启用 “自定义流媒体 DNS” 时，加入的域名始终使用 “流媒体 DNS 服务器” 进行解析（每个域名一行，支持域名匹配规则）"
+
+msgid "Client IP China Direct"
+msgstr "客户端IP国内直连"
+
+msgid "Added client IP addresses will always use \'Local DNS\' for resolution (one IP or CIDR per line)."
+msgstr "加入的客户端IP地址始终使用 “本地DNS” 进行解析（每个IP或CIDR一行）"

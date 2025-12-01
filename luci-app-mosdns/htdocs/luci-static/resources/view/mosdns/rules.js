@@ -16,13 +16,14 @@ return view.extend({
 		s.sortable = true;
 
 		s.tab('whitelist', _('White Lists'));
-		s.tab('blocklist', _('Block Lists'));
-		s.tab('greylist', _('Grey Lists'));
-		s.tab('ddnslist', _('DDNS Lists'));
-		s.tab('hostslist', _('Hosts'));
-		s.tab('redirectlist', _('Redirect'));
-		s.tab('localptrlist', _('Block PTR'));
-		s.tab('streamingmedialist', _('Streaming Media'));
+s.tab('blocklist', _('Block Lists'));
+s.tab('greylist', _('Grey Lists'));
+s.tab('ddnslist', _('DDNS Lists'));
+s.tab('hostslist', _('Hosts'));
+s.tab('redirectlist', _('Redirect'));
+s.tab('localptrlist', _('Block PTR'));
+s.tab('streamingmedialist', _('Streaming Media'));
+s.tab('clientipcn', _('Client IP China Direct'));
 
 		o = s.taboption('whitelist', form.TextValue, '_whitelist',
 			null,
@@ -240,8 +241,35 @@ return view.extend({
 			});
 		};
 
-		return m.render();
-	},
+		o = s.taboption('clientipcn', form.TextValue, '_clientipcn',
+		null,
+		'<font color=\'red\'>'
+		+ _('Added client IP addresses will always use \'Local DNS\' for resolution (one IP or CIDR per line).')
+		+ '</font>'
+	);
+	o.rows = 25;
+	o.cfgvalue = function (section_id) {
+		return fs.trimmed('/etc/mosdns/rule/client-ip-cn.txt').catch(function (e) {
+			return "";
+		});
+	};
+	o.write = function (section_id, formvalue) {
+		return this.cfgvalue(section_id).then(function (value) {
+			if (value == formvalue) {
+				return;
+			}
+			return fs.write('/etc/mosdns/rule/client-ip-cn.txt', formvalue.trim().replace(/\r\n/g, '\n') + '\n')
+				.then(function (i) {
+					ui.addNotification(null, E('p', _('Client IP China Direct') + '&#160;' + _('Rules have been saved.')), 'info');
+				})
+				.catch(function (e) {
+					ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
+				});
+		});
+	};
+
+	return m.render();
+},
 
 	handleSaveApply: function (ev) {
 		onclick = L.bind(this.handleSave, this, m);
