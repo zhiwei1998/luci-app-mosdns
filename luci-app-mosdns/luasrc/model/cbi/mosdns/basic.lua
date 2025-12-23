@@ -47,7 +47,7 @@ o:depends("configfile", "/etc/mosdns/config.yaml")
 o = s:taboption("basic", Flag, "redirect", translate("DNS Forward"), translate("Forward Dnsmasq Domain Name resolution requests to MosDNS"))
 o.default = true
 
-o = s:taboption("basic", Flag, "prefer_ipv4", translate("Remote DNS prefer IPv4"), translate("IPv4 is preferred for remote DNS resolution of dual-stack addresses, and is not affected when the destination is IPv6 only"))
+o = s:taboption("basic", Flag, "prefer_ipv4", translate("DNS resolution prefers IPv4"), translate("IPv4 is preferred for DNS resolution of dual-stack addresses, and is not affected when the destination is IPv6 only"))
 o:depends( "configfile", "/etc/mosdns/config.yaml")
 o.default = true
 

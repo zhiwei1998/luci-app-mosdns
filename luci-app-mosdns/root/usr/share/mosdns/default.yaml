@@ -120,6 +120,12 @@ plugins:
       upstreams:
         - addr: remote_dns
 
+  - tag: forward_local_upstream
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $forward_local
+
   - tag: forward_remote_upstream
     type: sequence
     args:
@@ -196,13 +202,13 @@ plugins:
     type: sequence
     args:
       - matches: client_ip $client_ip_cn
-        exec: $forward_local
+        exec: $forward_local_upstream
 
   - tag: query_is_local_domain
     type: sequence
     args:
       - matches: qname $geosite_cn
-        exec: $forward_local
+        exec: $forward_local_upstream
 
   - tag: query_is_no_local_domain
     type: sequence
@@ -214,7 +220,7 @@ plugins:
     type: sequence
     args:
       - matches: qname $whitelist
-        exec: $forward_local
+        exec: $forward_local_upstream
 
   - tag: query_is_greylist_domain
     type: sequence
